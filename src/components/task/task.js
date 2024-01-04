@@ -1,6 +1,7 @@
 import React from "react";
 
 import '../task/task.css'
+import { formatDistanceToNow } from "date-fns";
 
 const Task = ({ status, description, time, editing = false }) => {
 
@@ -10,7 +11,7 @@ const Task = ({ status, description, time, editing = false }) => {
                 <input className="toggle" type="checkbox" />
                 <label>
                     <span className="description">{description}</span>
-                    <span className="created">{time}</span>
+                    <span className="created">{formatDistanceToNow(new Date(), { includeSeconds: true })}</span>
                 </label>
                 <button className="icon icon-edit"></button>
                 <button className="icon icon-destroy"></button>
