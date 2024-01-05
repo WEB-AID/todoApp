@@ -5,7 +5,7 @@ import './taskList.css';
 
 function TaskList({ todos }) {
   const elements = todos.map((item) => {
-    return <Task {...item} />;
+    return <Task key={item.id} {...item} />;
   });
 
   return <ul className="todo-list">{elements}</ul>;

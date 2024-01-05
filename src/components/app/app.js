@@ -11,17 +11,20 @@ function App() {
       status: 'completed',
       description: 'Completed task',
       time: 'created 17 seconds ago',
+      id: 1,
     },
     {
       status: 'editing',
       description: 'Editing task',
       time: 'created 5 minutes ago',
       editing: true,
+      id: 2,
     },
     {
       status: 'no-status',
       description: 'Active task',
       time: 'created 5 minutes ago',
+      id: 3,
     },
   ];
 

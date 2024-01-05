@@ -2,7 +2,7 @@ import React from 'react';
 import './task.css';
 import { formatDistanceToNow } from 'date-fns';
 
-function Task({ status, description, time, editing = false }) {
+function Task({ status, description, editing = false }) {
   return (
     <li className={status}>
       <div className="view">
