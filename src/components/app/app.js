@@ -17,6 +17,18 @@ export default class App extends React.Component {
       this.createItem('Active task'),
       this.createItem('Active task'),
     ],
+    filterMode: 'all',
+  };
+
+  addItem = (text) => {
+    const newItem = this.createItem(text);
+
+    this.setState(({ todoData }) => {
+      const newArr = [...todoData.slice(0), newItem];
+      return {
+        todoData: newArr,
+      };
+    });
   };
 
   deleteItem = (id) => {
@@ -24,6 +36,20 @@ export default class App extends React.Component {
       const index = todoData.findIndex((elem) => elem.id === id);
       const newArr = [...todoData.slice(0, index), ...todoData.slice(index + 1)];
 
+      return {
+        todoData: newArr,
+      };
+    });
+  };
+
+  editItem = (id) => {
+    this.setState(({ todoData }) => {
+      const index = todoData.findIndex((el) => id === el.id);
+      const newElem = {
+        ...todoData[index],
+        editing: !todoData[index].editing,
+      };
+      const newArr = [...todoData.slice(0, index), newElem, ...todoData.slice(index + 1)];
       return {
         todoData: newArr,
       };
@@ -42,34 +68,32 @@ export default class App extends React.Component {
         todoData: newArr,
       };
     });
-    console.log(id);
   };
 
-  editItem = (id) => {
-    this.setState(({ todoData }) => {
-      const index = todoData.findIndex((el) => id === el.id);
-      const newElem = {
-        ...todoData[index],
-        editing: !todoData[index].editing,
-      };
-      const newArr = [...todoData.slice(0, index), newElem, ...todoData.slice(index + 1)];
+  setFilterMode = (mode) => {
+    this.setState(() => {
       return {
-        todoData: newArr,
-      };
-    });
-    console.log(id);
-  };
-
-  addItem = (text) => {
-    const newItem = this.createItem(text);
-
-    this.setState(({ todoData }) => {
-      const newArr = [...todoData.slice(0), newItem];
-      return {
-        todoData: newArr,
+        filterMode: mode,
       };
     });
   };
+
+  clearCompleted = () => {
+    this.setState(({ todoData }) => {
+      return {
+        todoData: this.filter(todoData, 'active'),
+      };
+    });
+  };
+
+  filter(todos, filterType) {
+    const filters = {
+      all: () => todos,
+      active: () => todos.filter((item) => !item.done),
+      completed: () => todos.filter((item) => item.done),
+    };
+    return filters[filterType]();
+  }
 
   createItem(text) {
     this.maxId += 1;
@@ -86,18 +110,23 @@ export default class App extends React.Component {
     const todosLeftCount = this.state.todoData.filter((elem) => {
       return !elem.done;
     });
+    const filteredItems = this.filter(this.state.todoData, this.state.filterMode);
 
     return (
       <section className="todoapp">
         <NewTaskForm onAddClick={this.addItem} />
         <section className="main">
           <TaskList
-            todos={this.state.todoData}
+            todos={filteredItems}
             onDeleteClick={this.deleteItem}
             onToggleDone={this.toggleDone}
             onEditItem={this.editItem}
           />
-          <Footer todosLeftCount={todosLeftCount.length} />
+          <Footer
+            todosLeftCount={todosLeftCount.length}
+            setFilterMode={this.setFilterMode}
+            clearCompleted={this.clearCompleted}
+          />
         </section>
       </section>
     );

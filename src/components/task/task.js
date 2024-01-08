@@ -20,7 +20,7 @@ export default class Task extends React.Component {
     return (
       <li className={statusClass}>
         <div className="view">
-          <input onClick={onToggleDone} className="toggle" type="checkbox" />
+          <input checked={done} onClick={onToggleDone} className="toggle" type="checkbox" />
           <label>
             <span className="description">{description}</span>
             <span className="created">{formatDistanceToNow(new Date(), { includeSeconds: true })}</span>
