@@ -18,6 +18,9 @@
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
+        "ecmaFeatures": {
+            "jsx": true
+          },
         "sourceType": "module",
         "allowImportExportEverywhere": false,
         "requireConfigFile": false
