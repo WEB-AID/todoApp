@@ -132,5 +132,3 @@ export default class App extends React.Component {
     );
   }
 }
-
-const x = 0;
