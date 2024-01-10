@@ -1,24 +1,59 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Task from '../task/task';
 import './taskList.css';
 
-function TaskList({ todos, onDeleteClick, onToggleDone, onEditItem }) {
-  const elements = todos.map((item) => {
-    const { id, ...rest } = item;
+export default class TaskList extends React.Component {
+  static defaultProps = {
+    todos: [
+      {
+        status: 'status-default prop',
+        description: 'description-default prop',
+        time: 'time-default prop',
+        id: 666,
+        editing: false,
+      },
+    ],
+    onDeleteClick: () => {},
+    onToggleDone: () => {},
+    onEditItem: () => {},
+  };
 
-    return (
-      <Task
-        key={id}
-        onDeleteClick={() => onDeleteClick(id)}
-        onToggleDone={() => onToggleDone(id)}
-        onEditItem={() => onEditItem(id)}
-        {...rest}
-      />
-    );
-  });
+  static propTypes = {
+    todos: PropTypes.arrayOf(
+      PropTypes.shape({
+        status: PropTypes.string,
+        description: PropTypes.string,
+        time: PropTypes.string,
+        id: PropTypes.number,
+        editing: PropTypes.bool,
+      })
+    ),
+    onDeleteClick: PropTypes.func,
+    onToggleDone: PropTypes.func,
+    onEditItem: PropTypes.func,
+  };
 
-  return <ul className="todo-list">{elements}</ul>;
+  state = {};
+
+  render() {
+    const { todos, onDeleteClick, onToggleDone, onEditItem } = this.props;
+
+    const elements = todos.map((item) => {
+      const { id, ...rest } = item;
+
+      return (
+        <Task
+          key={id}
+          onDeleteClick={() => onDeleteClick(id)}
+          onToggleDone={() => onToggleDone(id)}
+          onEditItem={() => onEditItem(id)}
+          {...rest}
+        />
+      );
+    });
+
+    return <ul className="todo-list">{elements}</ul>;
+  }
 }
-
-export default TaskList;

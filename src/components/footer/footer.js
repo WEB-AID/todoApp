@@ -1,9 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './footer.css';
 import TaskFilter from '../taskFilter/taskFilter';
 
 export default class Footer extends React.Component {
+  static defaultProps = {
+    todosLeftCount: 666,
+    setFilterMode: () => {},
+    clearCompleted: () => {},
+  };
+
+  static propTypes = {
+    todosLeftCount: PropTypes.number,
+    setFilterMode: PropTypes.func,
+    clearCompleted: PropTypes.func,
+  };
+
   state = {};
 
   render() {

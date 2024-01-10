@@ -2,12 +2,9 @@ import React from 'react';
 import './taskFilter.css';
 
 export default class TaskFilter extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeFilterMode: 'all',
-    };
-  }
+  state = {
+    activeFilterMode: 'all',
+  };
 
   handleFilterClick(filterMode) {
     this.setState({ activeFilterMode: filterMode });

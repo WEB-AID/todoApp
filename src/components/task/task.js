@@ -1,8 +1,27 @@
 import React from 'react';
 import './task.css';
 import { formatDistanceToNow } from 'date-fns';
+import PropTypes from 'prop-types';
 
 export default class Task extends React.Component {
+  static defaultProps = {
+    description: '',
+    onDeleteClick: () => {},
+    onToggleDone: () => {},
+    onEditItem: () => {},
+    editing: false,
+    done: false,
+  };
+
+  static propTypes = {
+    description: PropTypes.string,
+    onDeleteClick: PropTypes.func,
+    onToggleDone: PropTypes.func,
+    onEditItem: PropTypes.func,
+    editing: PropTypes.bool,
+    done: PropTypes.bool,
+  };
+
   state = {};
 
   render() {
@@ -20,7 +39,7 @@ export default class Task extends React.Component {
     return (
       <li className={statusClass}>
         <div className="view">
-          <input checked={done} onClick={onToggleDone} className="toggle" type="checkbox" />
+          <input checked={done} onChange={onToggleDone} className="toggle" type="checkbox" />
           <label>
             <span className="description">{description}</span>
             <span className="created">{formatDistanceToNow(new Date(), { includeSeconds: true })}</span>
