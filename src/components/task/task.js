@@ -26,18 +26,18 @@ export default class Task extends React.Component {
 
   render() {
     const { description, onDeleteClick, onToggleDone, onEditItem, done, editing } = this.props;
-    let statusClass = '';
+    let taskStatus = '';
 
     if (done) {
-      statusClass = 'completed';
+      taskStatus = 'completed';
     }
 
     if (editing) {
-      statusClass = 'editing';
+      taskStatus = 'editing';
     }
 
     return (
-      <li className={statusClass}>
+      <li className={taskStatus}>
         <div className="view">
           <input checked={done} onChange={onToggleDone} className="toggle" type="checkbox" />
           <label>
