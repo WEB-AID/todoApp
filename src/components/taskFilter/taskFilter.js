@@ -2,12 +2,9 @@ import React from 'react';
 import './taskFilter.css';
 
 export default class TaskFilter extends React.Component {
-  state = {
-    activeFilterMode: 'all',
-  };
+  state = {};
 
   handleFilterClick(filterMode) {
-    this.setState({ activeFilterMode: filterMode });
     this.props.setFilterMode(filterMode);
   }
 
@@ -18,7 +15,7 @@ export default class TaskFilter extends React.Component {
           <button
             onClick={() => this.handleFilterClick('all')}
             type="button"
-            className={this.state.activeFilterMode === 'all' ? 'selected' : ''}
+            className={this.props.filterMode === 'all' ? 'selected' : ''}
           >
             All
           </button>
@@ -27,7 +24,7 @@ export default class TaskFilter extends React.Component {
           <button
             onClick={() => this.handleFilterClick('active')}
             type="button"
-            className={this.state.activeFilterMode === 'active' ? 'selected' : ''}
+            className={this.props.filterMode === 'active' ? 'selected' : ''}
           >
             Active
           </button>
@@ -36,7 +33,7 @@ export default class TaskFilter extends React.Component {
           <button
             onClick={() => this.handleFilterClick('completed')}
             type="button"
-            className={this.state.activeFilterMode === 'completed' ? 'selected' : ''}
+            className={this.props.filterMode === 'completed' ? 'selected' : ''}
           >
             Completed
           </button>

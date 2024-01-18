@@ -33,8 +33,7 @@ export default class App extends React.Component {
 
   deleteItem = (id) => {
     this.setState(({ todoData }) => {
-      const index = todoData.findIndex((elem) => elem.id === id);
-      const newArr = [...todoData.slice(0, index), ...todoData.slice(index + 1)];
+      const newArr = todoData.filter((elem) => elem.id !== id);
 
       return {
         todoData: newArr,
@@ -47,6 +46,21 @@ export default class App extends React.Component {
       const index = todoData.findIndex((el) => id === el.id);
       const newElem = {
         ...todoData[index],
+        editing: !todoData[index].editing,
+      };
+      const newArr = [...todoData.slice(0, index), newElem, ...todoData.slice(index + 1)];
+      return {
+        todoData: newArr,
+      };
+    });
+  };
+
+  doneItemEdit = (text, id) => {
+    this.setState(({ todoData }) => {
+      const index = todoData.findIndex((el) => id === el.id);
+      const newElem = {
+        ...todoData[index],
+        description: text,
         editing: !todoData[index].editing,
       };
       const newArr = [...todoData.slice(0, index), newElem, ...todoData.slice(index + 1)];
@@ -86,11 +100,11 @@ export default class App extends React.Component {
     });
   };
 
-  filter(todos, filterType) {
+  filter(filterType) {
     const filters = {
-      all: () => todos,
-      active: () => todos.filter((item) => !item.done),
-      completed: () => todos.filter((item) => item.done),
+      all: () => this.state.todoData,
+      active: () => this.state.todoData.filter((item) => !item.done),
+      completed: () => this.state.todoData.filter((item) => item.done),
     };
     return filters[filterType]();
   }
@@ -110,7 +124,7 @@ export default class App extends React.Component {
     const todosLeftCount = this.state.todoData.filter((elem) => {
       return !elem.done;
     });
-    const filteredItems = this.filter(this.state.todoData, this.state.filterMode);
+    const filteredItems = this.filter(this.state.filterMode);
 
     return (
       <section className="todoapp">
@@ -121,11 +135,13 @@ export default class App extends React.Component {
             onDeleteClick={this.deleteItem}
             onToggleDone={this.toggleDone}
             onEditItem={this.editItem}
+            doneItemEdit={this.doneItemEdit}
           />
           <Footer
             todosLeftCount={todosLeftCount.length}
             setFilterMode={this.setFilterMode}
             clearCompleted={this.clearCompleted}
+            filterMode={this.state.filterMode}
           />
         </section>
       </section>

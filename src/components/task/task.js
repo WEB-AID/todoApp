@@ -11,6 +11,7 @@ export default class Task extends React.Component {
     onEditItem: () => {},
     editing: false,
     done: false,
+    doneItemEdit: () => {},
   };
 
   static propTypes = {
@@ -20,9 +21,28 @@ export default class Task extends React.Component {
     onEditItem: PropTypes.func,
     editing: PropTypes.bool,
     done: PropTypes.bool,
+    doneItemEdit: PropTypes.func,
   };
 
-  state = {};
+  state = {
+    inputValue: this.props.description,
+  };
+
+  onInputChange = (evt) => {
+    this.setState(() => ({
+      inputValue: evt.target.value,
+    }));
+  };
+
+  onInputEvent = (evt) => {
+    const { key } = evt;
+    const text = evt.target.value;
+    if (key === 'Enter' && text !== '') {
+      this.props.doneItemEdit(text);
+    } else {
+      this.setState({ inputValue: text });
+    }
+  };
 
   render() {
     const { description, onDeleteClick, onToggleDone, onEditItem, done, editing } = this.props;
@@ -47,7 +67,13 @@ export default class Task extends React.Component {
           <button onClick={onEditItem} type="button" className="icon icon-edit" />
           <button onClick={onDeleteClick} type="button" className="icon icon-destroy" />
         </div>
-        {editing ? <input type="text" className="edit" value="Editing task" /> : null}
+        <input
+          type="text"
+          className="edit"
+          value={this.state.inputValue}
+          onKeyUp={this.onInputEvent}
+          onChange={this.onInputChange}
+        />
       </li>
     );
   }

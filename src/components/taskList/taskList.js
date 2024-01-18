@@ -18,6 +18,7 @@ export default class TaskList extends React.Component {
     onDeleteClick: () => {},
     onToggleDone: () => {},
     onEditItem: () => {},
+    doneItemEdit: () => {},
   };
 
   static propTypes = {
@@ -33,12 +34,13 @@ export default class TaskList extends React.Component {
     onDeleteClick: PropTypes.func,
     onToggleDone: PropTypes.func,
     onEditItem: PropTypes.func,
+    doneItemEdit: PropTypes.func,
   };
 
   state = {};
 
   render() {
-    const { todos, onDeleteClick, onToggleDone, onEditItem } = this.props;
+    const { todos, onDeleteClick, onToggleDone, onEditItem, doneItemEdit } = this.props;
 
     const elements = todos.map((item) => {
       const { id, ...rest } = item;
@@ -49,6 +51,7 @@ export default class TaskList extends React.Component {
           onDeleteClick={() => onDeleteClick(id)}
           onToggleDone={() => onToggleDone(id)}
           onEditItem={() => onEditItem(id)}
+          doneItemEdit={(text) => doneItemEdit(text, id)}
           {...rest}
         />
       );

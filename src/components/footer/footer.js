@@ -9,23 +9,25 @@ export default class Footer extends React.Component {
     todosLeftCount: 666,
     setFilterMode: () => {},
     clearCompleted: () => {},
+    filterMode: 'all',
   };
 
   static propTypes = {
     todosLeftCount: PropTypes.number,
     setFilterMode: PropTypes.func,
     clearCompleted: PropTypes.func,
+    filterMode: PropTypes.string,
   };
 
   state = {};
 
   render() {
-    const { todosLeftCount, setFilterMode, clearCompleted } = this.props;
+    const { todosLeftCount, setFilterMode, clearCompleted, filterMode } = this.props;
 
     return (
       <footer className="footer">
         <span className="todo-count">{todosLeftCount} items left</span>
-        <TaskFilter setFilterMode={setFilterMode} />
+        <TaskFilter setFilterMode={setFilterMode} filterMode={filterMode} />
         <button onClick={clearCompleted} type="button" className="clear-completed">
           Clear completed
         </button>
