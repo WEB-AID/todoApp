@@ -93,9 +93,9 @@ export default class App extends React.Component {
   };
 
   clearCompleted = () => {
-    this.setState(({ todoData }) => {
+    this.setState(() => {
       return {
-        todoData: this.filter(todoData, 'active'),
+        todoData: this.filter('active'),
       };
     });
   };
