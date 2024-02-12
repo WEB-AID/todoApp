@@ -23,6 +23,7 @@ export default class App extends React.Component {
         todoData: newArr,
       };
     });
+    this.updateTimerUnmounted(newItem.id);
   };
 
   toggleDone = (id) => {
@@ -94,20 +95,64 @@ export default class App extends React.Component {
     });
   };
 
-  updateTimer = (minutes, seconds, id) => {
-    const updatedTodoData = this.state.todoData.map((item) => {
-      if (item.id === id) {
-        return {
-          ...item,
-          min: minutes,
-          sec: seconds,
-        };
-      }
-      return item;
-    });
+  updateTimerUnmounted = (id, start = true) => {
+    const x = this.state.todoData.find((item) => item.id === id);
+    if (x && x.intervalId === null) {
+      const intervalId = setInterval(() => {
+        this.setState((prevState) => ({
+          todoData: prevState.todoData.map((item) => {
+            if (item.id === id && item.intervalId !== null) {
+              const newSeconds = item.sec === 0 && item.min > 0 ? 59 : item.sec - 1;
+              const newMinutes = item.sec === 0 && item.min > 0 ? item.min - 1 : item.min;
 
-    this.setState(() => ({
-      todoData: updatedTodoData,
+              const finalMinutes = newMinutes < 0 ? 0 : newMinutes;
+              const finalSeconds = newSeconds < 0 ? 0 : newSeconds;
+
+              return {
+                ...item,
+                min: finalMinutes,
+                sec: finalSeconds,
+              };
+            }
+            return item;
+          }),
+        }));
+      }, 1000);
+
+      this.setState((prevState) => ({
+        todoData: prevState.todoData.map((item) => {
+          if (item.id === id && item.intervalId === null) {
+            return {
+              ...item,
+              intervalId: start ? intervalId : null,
+            };
+          }
+          return item;
+        }),
+      }));
+    }
+  };
+
+  startTimer = (id) => {
+    const x = this.state.todoData.find((item) => item.id === id);
+    if (x && x.intervalId === null) {
+      this.stopTimer(id);
+      this.updateTimerUnmounted(id);
+    }
+  };
+
+  stopTimer = (id) => {
+    this.setState((prevState) => ({
+      todoData: prevState.todoData.map((item) => {
+        if (item.id === id) {
+          clearInterval(item.intervalId);
+          return {
+            ...item,
+            intervalId: null,
+          };
+        }
+        return item;
+      }),
     }));
   };
 
@@ -118,6 +163,7 @@ export default class App extends React.Component {
       description: text,
       min,
       sec,
+      intervalId: null,
       time: formatDistanceToNow(new Date(), { includeSeconds: true }),
       id: this.maxId,
       editing: false,
@@ -150,7 +196,9 @@ export default class App extends React.Component {
             onEditItem={this.editItem}
             onDeleteClick={this.deleteItem}
             doneItemEdit={this.doneItemEdit}
-            updateTimer={this.updateTimer}
+            updateTimerUnmounted={this.updateTimerUnmounted}
+            stopTimer={this.stopTimer}
+            startTimer={this.startTimer}
           />
           <Footer
             todosLeftCount={todosLeftCount.length}

@@ -6,7 +6,7 @@ export default class TaskList extends React.Component {
   state = {};
 
   render() {
-    const { todos, onDeleteClick, onToggleDone, onEditItem, doneItemEdit, updateTimer } = this.props;
+    const { todos, onDeleteClick, onToggleDone, onEditItem, doneItemEdit, updateTimerUnmounted } = this.props;
 
     const elements = todos.map((item) => {
       const { id, ...rest } = item;
@@ -18,7 +18,9 @@ export default class TaskList extends React.Component {
           onEditItem={() => onEditItem(id)}
           doneItemEdit={(text) => doneItemEdit(text, id)}
           onDeleteClick={() => onDeleteClick(id)}
-          updateTimer={(finalMinutes, finalSeconds) => updateTimer(finalMinutes, finalSeconds, id)}
+          updateTimerUnmounted={() => updateTimerUnmounted(id)}
+          startTimer={() => this.props.startTimer(id)}
+          stopTimer={() => this.props.stopTimer(id)}
           {...rest}
         />
       );
